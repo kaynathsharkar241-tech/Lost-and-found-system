@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2026 at 03:41 AM
+-- Generation Time: Apr 16, 2026 at 06:18 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,8 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `lost_found_db`
+-- Database: `lost_and_found`
 --
+CREATE DATABASE IF NOT EXISTS `lost_and_found` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `lost_and_found`;
 
 -- --------------------------------------------------------
 
@@ -27,13 +29,16 @@ SET time_zone = "+00:00";
 -- Table structure for table `adminactions`
 --
 
-CREATE TABLE `adminactions` (
-  `action_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `adminactions` (
+  `action_id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) DEFAULT NULL,
   `item_id` int(11) DEFAULT NULL,
   `action_type` varchar(50) DEFAULT NULL,
-  `action_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `action_date` date DEFAULT NULL,
+  PRIMARY KEY (`action_id`),
+  KEY `admin_id` (`admin_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `adminactions`
@@ -52,10 +57,11 @@ INSERT INTO `adminactions` (`action_id`, `admin_id`, `item_id`, `action_type`, `
 -- Table structure for table `categories`
 --
 
-CREATE TABLE `categories` (
-  `category_id` int(11) NOT NULL,
-  `category_name` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE IF NOT EXISTS `categories` (
+  `category_id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `categories`
@@ -74,14 +80,17 @@ INSERT INTO `categories` (`category_id`, `category_name`) VALUES
 -- Table structure for table `claims`
 --
 
-CREATE TABLE `claims` (
-  `claim_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `claims` (
+  `claim_id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) DEFAULT NULL,
   `claimed_by` int(11) DEFAULT NULL,
   `claim_date` date DEFAULT NULL,
   `status` enum('pending','approved','rejected') DEFAULT NULL,
-  `proof_description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `proof_description` text DEFAULT NULL,
+  PRIMARY KEY (`claim_id`),
+  UNIQUE KEY `item_id` (`item_id`,`claimed_by`),
+  KEY `claimed_by` (`claimed_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `claims`
@@ -98,11 +107,13 @@ INSERT INTO `claims` (`claim_id`, `item_id`, `claimed_by`, `claim_date`, `status
 -- Table structure for table `itemimages`
 --
 
-CREATE TABLE `itemimages` (
-  `image_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `itemimages` (
+  `image_id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) DEFAULT NULL,
-  `image_url` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `image_url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`image_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `itemimages`
@@ -122,15 +133,18 @@ INSERT INTO `itemimages` (`image_id`, `item_id`, `image_url`) VALUES
 -- Table structure for table `items`
 --
 
-CREATE TABLE `items` (
-  `item_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `items` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
   `reported_by` int(11) DEFAULT NULL,
   `status` enum('lost','found','claimed','closed') DEFAULT NULL,
-  `date_reported` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `date_reported` date DEFAULT NULL,
+  PRIMARY KEY (`item_id`),
+  KEY `category_id` (`category_id`),
+  KEY `reported_by` (`reported_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `items`
@@ -149,11 +163,12 @@ INSERT INTO `items` (`item_id`, `title`, `description`, `category_id`, `reported
 -- Table structure for table `locations`
 --
 
-CREATE TABLE `locations` (
-  `location_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `locations` (
+  `location_id` int(11) NOT NULL AUTO_INCREMENT,
   `place_name` varchar(100) DEFAULT NULL,
-  `description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `description` text DEFAULT NULL,
+  PRIMARY KEY (`location_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `locations`
@@ -172,13 +187,15 @@ INSERT INTO `locations` (`location_id`, `place_name`, `description`) VALUES
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE `notifications` (
-  `notification_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `notification_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `message` text DEFAULT NULL,
   `is_read` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`notification_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notifications`
@@ -197,14 +214,17 @@ INSERT INTO `notifications` (`notification_id`, `user_id`, `message`, `is_read`,
 -- Table structure for table `reports`
 --
 
-CREATE TABLE `reports` (
-  `report_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `reports` (
+  `report_id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) DEFAULT NULL,
   `location_id` int(11) DEFAULT NULL,
   `report_type` enum('lost','found') DEFAULT NULL,
   `report_date` date DEFAULT NULL,
-  `details` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `details` text DEFAULT NULL,
+  PRIMARY KEY (`report_id`),
+  UNIQUE KEY `item_id` (`item_id`),
+  KEY `location_id` (`location_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reports`
@@ -223,15 +243,17 @@ INSERT INTO `reports` (`report_id`, `item_id`, `location_id`, `report_type`, `re
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `role` enum('admin','user') NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -243,133 +265,6 @@ INSERT INTO `users` (`user_id`, `full_name`, `email`, `phone`, `password`, `role
 (3, 'Nusrat Jahan', 'nusrat@gmail.com', '01744444444', 'pass123', 'user', '2026-04-15 17:00:18'),
 (4, 'Tanvir Hasan', 'tanvir@gmail.com', '01755555555', 'pass123', 'user', '2026-04-15 17:00:18'),
 (5, 'Admin User', 'admin@gmail.com', '01733333333', 'admin123', 'admin', '2026-04-15 17:00:18');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `adminactions`
---
-ALTER TABLE `adminactions`
-  ADD PRIMARY KEY (`action_id`),
-  ADD KEY `admin_id` (`admin_id`),
-  ADD KEY `item_id` (`item_id`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`category_id`);
-
---
--- Indexes for table `claims`
---
-ALTER TABLE `claims`
-  ADD PRIMARY KEY (`claim_id`),
-  ADD UNIQUE KEY `item_id` (`item_id`,`claimed_by`),
-  ADD KEY `claimed_by` (`claimed_by`);
-
---
--- Indexes for table `itemimages`
---
-ALTER TABLE `itemimages`
-  ADD PRIMARY KEY (`image_id`),
-  ADD KEY `item_id` (`item_id`);
-
---
--- Indexes for table `items`
---
-ALTER TABLE `items`
-  ADD PRIMARY KEY (`item_id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `reported_by` (`reported_by`);
-
---
--- Indexes for table `locations`
---
-ALTER TABLE `locations`
-  ADD PRIMARY KEY (`location_id`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`notification_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `reports`
---
-ALTER TABLE `reports`
-  ADD PRIMARY KEY (`report_id`),
-  ADD UNIQUE KEY `item_id` (`item_id`),
-  ADD KEY `location_id` (`location_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `adminactions`
---
-ALTER TABLE `adminactions`
-  MODIFY `action_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `claims`
---
-ALTER TABLE `claims`
-  MODIFY `claim_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `itemimages`
---
-ALTER TABLE `itemimages`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `items`
---
-ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `locations`
---
-ALTER TABLE `locations`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `reports`
---
-ALTER TABLE `reports`
-  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
