@@ -1,0 +1,86 @@
+/* The "Pretty" Blue Gradient Theme */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* This creates the dark blue to light blue to white transition */
+    background: linear-gradient(180deg, #1a2a6c 0%, #b21f1f 0%, #fdbb2d 0%, #224488 0%, #3a7bd5 40%, #ffffff 100%);
+    background-attachment: fixed; /* Keeps the gradient still while you scroll */
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Glassmorphism Effect for Cards */
+.card {
+    background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Navigation Bar */
+.navbar {
+    background: rgba(26, 42, 108, 0.9); /* Dark Blue */
+    backdrop-filter: blur(10px); /* Blurs the background behind the bar */
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: #90caf9; /* Light blue glow on hover */
+}
+
+/* Beautiful Buttons */
+.btn {
+    padding: 12px 25px;
+    border-radius: 30px; /* Rounded pill shape */
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    color: white;
+    box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+}
+
+/* Inputs */
+input, select, textarea {
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #3a7bd5;
+    outline: none;
+    background: #fff;
+}
