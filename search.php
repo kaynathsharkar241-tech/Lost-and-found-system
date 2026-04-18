@@ -111,6 +111,15 @@ $loc_result = $conn->query("SELECT place_name FROM locations ORDER BY place_name
                     <p>Category: <?php echo $row['category_name']; ?> 
                        | Location: <?php echo $row['place_name'] ?? 'N/A'; ?></p>
                     <small>Reported on: <?php echo $row['date_reported']; ?></small>
+                    
+                    <?php if($row['status'] == 'found'): ?>
+                        <br><br>
+                        <a href="claim_item.php?item_id=<?php echo $row['item_id']; ?>" 
+                           style="display:inline-block; padding: 7px 16px; background:#3498db; color:white; 
+                                  border-radius:5px; text-decoration:none; font-size:13px;">
+                            Claim This Item
+                        </a>
+                    <?php endif; ?>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
