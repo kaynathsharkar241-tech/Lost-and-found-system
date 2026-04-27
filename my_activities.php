@@ -3,7 +3,7 @@ session_start();
 include 'db_connect.php';
 
 
-$current_user_id = 1; 
+$current_user_id = $_SESSION['user_id'];
 
 // Items reported by this user
 $my_items_query = "SELECT i.item_id, i.title, i.description, 
