@@ -2,7 +2,7 @@
 session_start();
 include 'db_connect.php';
 
-$current_user_id = 1; // replace with $_SESSION['user_id'] later
+$current_user_id = $_SESSION['user_id'];
 
 $message = "";
 $error   = "";
