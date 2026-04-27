@@ -2,7 +2,7 @@
 session_start();
 include 'db_connect.php';
 
-$current_user_id = 1; 
+$current_user_id = $_SESSION['user_id'];
 
 // Fetch all notifications for this user 
 $notif_query = "SELECT notification_id, message, is_read, created_at
